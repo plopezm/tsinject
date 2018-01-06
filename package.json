@@ -1,6 +1,6 @@
 {
-  "name": "inject",
-  "version": "0.0.1",
+  "name": "@plopezm/tsinject",
+  "version": "0.0.2",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,11 @@
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "clean": "rm -fr dist"
   },
-  "author": "Pablo <pabloplm@gmail.com>",
+  "author": "Pablo LM <pabloplm@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plopezm/tsinject"
+  },
   "license": "MIT",
   "dependencies": {
     "reflect-metadata": "^0.1.10"
