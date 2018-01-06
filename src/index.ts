@@ -1,0 +1,1 @@
+export { Inject, InjectionFactory } from './core/inject';

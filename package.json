@@ -1,0 +1,24 @@
+{
+  "name": "inject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "clean": "rm -fr dist"
+  },
+  "author": "Pablo <pabloplm@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "reflect-metadata": "^0.1.10"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.0",
+    "@types/mocha": "^2.2.46",
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.6.2"
+  }
+}
