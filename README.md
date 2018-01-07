@@ -36,11 +36,10 @@ export class UserService {
 ```
 import { InjectionFactory } from '@plopezm/tsinject'
 import { UserService } from './services/user-service';
-InjectionFactory.register(UserService);
 import { UserResource } from "./resources/user-resource";
-```
 
-**NOTE: It is required to register the class in InjectionFactory before importing the classes who injects it**
+InjectionFactory.register(UserService);
+```
 
 3. Use your singleton
 

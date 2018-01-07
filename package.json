@@ -1,6 +1,6 @@
 {
   "name": "@plopezm/tsinject",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/chai": "^4.1.0",
     "@types/mocha": "^2.2.46",
+    "@types/node": "^8.5.7",
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
     "ts-node": "^4.1.0",

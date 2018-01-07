@@ -13,20 +13,20 @@ describe('InjectionFactory', () => {
         }
     }
     it('Object is registered', () => {
-        InjectionFactory.register(Example);
         class Tester {
             @Inject example: Example;
         } 
+        InjectionFactory.register(Example);
         let singletons = InjectionFactory.getSingletons();
         expect(Object.keys(singletons.singletons).length).to.equals(1);
         expect(singletons.singletons['Example']).to.not.equals(undefined);
     });
 
     it('Object is injected', () => {
-        InjectionFactory.register(Example);
         class Tester {
             @Inject example: Example;
         } 
+        InjectionFactory.register(Example);
         const tester = new Tester();
         expect(tester.example).to.not.equals(undefined);
     });
@@ -35,7 +35,7 @@ describe('InjectionFactory', () => {
         InjectionFactory.register(Example);
         class Tester {
             @Inject example: Example;
-        }    
+        }
         const tester = new Tester();
         expect(tester.example.data).to.not.equals(undefined);
         tester.example.data['other'] = "example value";
