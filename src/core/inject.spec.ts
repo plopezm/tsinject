@@ -5,7 +5,12 @@ import 'mocha';
 
 describe('InjectionFactory', () => {
     class Example {
-        text: string;
+        data: any = {};
+        constructor(){
+            this.data['example'] = {
+                "text": "example"
+            }
+        }
     }
     it('Object is registered', () => {
         InjectionFactory.register(Example);
@@ -32,9 +37,10 @@ describe('InjectionFactory', () => {
             @Inject example: Example;
         }    
         const tester = new Tester();
-        tester.example.text = "example value";
+        expect(tester.example.data).to.not.equals(undefined);
+        tester.example.data['other'] = "example value";
         const tester2UsesSingleton = new Tester();
-        expect(tester2UsesSingleton.example.text).to.equals("example value");
+        expect(tester2UsesSingleton.example.data["other"]).to.equals("example value");
     });
     
 });

@@ -21,7 +21,8 @@ export function Inject(target: any, key: string): any {
 export namespace InjectionFactory {
     export function register(...clazzes: any[]) {
         clazzes.forEach((clazz:any) => {
-            injectionStore.addInjection(clazz.name, Object.create(clazz.prototype));
+            let instance = new clazz.prototype.constructor;
+            injectionStore.addInjection(clazz.name, instance);
         });
     }
 
