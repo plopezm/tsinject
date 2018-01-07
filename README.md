@@ -2,6 +2,12 @@
 
 Dependency injection library. Currently only Singletons are implemented
 
+# Installing
+
+```
+npm install --save @plopezm/tsinject
+```
+
 # How to use it
 
 1. Defining a simple class: 
