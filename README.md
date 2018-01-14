@@ -54,8 +54,37 @@ import { Inject } from "@plopezm/tsinject";
 
 export class UserResource {
 
-    @Inject
+    @Inject()
     userService: UserService;
+
+    constructor(){        
+    }
+
+}
+```
+
+# Using an implementation gotten from a factory
+
+```
+import { Inject, Produces } from "@plopezm/tsinject";
+
+export class UserResource {
+
+    // It gets the default singleton registered
+    @Inject()
+    userService: UserService;
+
+    // It gets the specific singleton created in the named produces method
+    @Inject("MyFactoryService")
+    userServiceFromFactory: UserService;
+
+    // Creates a new object and registers it in the InjectionFactory automatically using the name included in @Produces
+    @Produces("MyFactoryService")
+    produceUserService() {
+        var userService = new UserService();
+        userService.initialize(example, example2);
+        return userService;
+    }
 
     constructor(){        
     }

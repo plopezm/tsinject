@@ -1,1 +1,1 @@
-export { Inject, InjectionFactory } from './core/inject';
+export { Inject, Produces, InjectionFactory } from './core/inject';
