@@ -65,6 +65,8 @@ export class UserResource {
 
 # Using an implementation gotten from a factory
 
+Injecting from a factory is really easy. In this case we don't have to register any class in the InjectionFactory. This is due to @Produces("") decorator registers a new singleton using the name included. To use this factory object we have to use @Inject("") with the same name that you used in @Produces("").
+
 ```
 import { Inject, Produces } from "@plopezm/tsinject";
 
