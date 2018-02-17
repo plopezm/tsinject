@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { InjectionStore } from '../store/injection-store';
 import { InjectionFactory } from '../store/injection-factory';
 
 function performInject(target: any, key: string, instanceToInject: any) {

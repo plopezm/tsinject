@@ -56,5 +56,4 @@ export namespace InjectionFactory {
     export function subscribeToInjection(intanceToInjectName: string, onNofication: NoficationCallback) {
         subscriptions.on(intanceToInjectName, onNofication);
     }
-
 }
