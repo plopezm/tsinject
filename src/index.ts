@@ -1,1 +1,2 @@
-export { Inject, Produces, InjectionFactory } from './core/inject';
+export { Inject, Produces } from './core/inject';
+export { InjectionFactory } from './store/injection-factory';

@@ -1,17 +1,12 @@
+import { EventEmitter } from 'events';
+
 export class InjectionStore {
 
+    interceptors: any;
     singletons: any;
 
     constructor() {
         this.singletons = {};
+        this.interceptors = {};
     }
-
-    addInjection(name: string, object: any){
-        this.singletons[name] = object;
-    }
-
-    getSingleton(name: string) {
-        return this.singletons[name];
-    }
-    
 }
