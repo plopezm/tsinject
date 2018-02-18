@@ -119,7 +119,7 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
     }
 ```
 
-2. Declaring inteceptor in desired method
+2. Declaring the interceptor in the desired method
 
 ```
     @Intercepted(ExampleInterceptor)
@@ -128,7 +128,7 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
     }
 ```
 
-3. Execute our method
+3. Executing our method
 
 ```
     let obj = new ExampleIntercepted();
