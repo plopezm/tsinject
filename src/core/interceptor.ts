@@ -6,7 +6,8 @@ export interface InterceptorComponent {
 }
 
 export interface InterceptorProperties {
-    next: Function
+    next: Function;
+    args: any[];
 }
 
 interface ProxyPerformerProperties {
@@ -24,26 +25,13 @@ export function Interceptor(interceptor: Function | InterceptorComponent) {
 // TODO: Binds method with interceptor
 export function Intercepted(clazzes: any) {
     return function(target: any, key: string, descriptor: PropertyDescriptor): any {
-        //let metadata = Reflect.getMetadata('design:type', target, key);
-        let interceptedMethod = target[key];
-        let intanceToInjectName = interceptedMethod.name;
-        console.log('metadata: ', interceptedMethod);
-        console.log('clazzes', clazzes);
-        console.log('descriptor', descriptor);
         let interceptor = InjectionFactory.getSingleton(clazzes.name);
-        console.log('interceptor', interceptor);
-                
-        Object.defineProperty(target, 'interceptor', {
-            value: interceptor
-        });
-        Object.defineProperty(target, 'target', {
-            value: target[key]
-        });
-        descriptor.value = performInterception;        
+        let performer = performInterception.bind({interceptor: interceptor, target: target[key]});
+        descriptor.value = performer;
     }
 }
 
-const performInterception = function(this: ProxyPerformerProperties){
+const performInterception = function(this: ProxyPerformerProperties, ...args: any[]){
     console.log("performInterception", "this =", this);
-    return this.interceptor.apply({next: this.target});
+    return this.interceptor.apply({next: this.target, args: args});
 }

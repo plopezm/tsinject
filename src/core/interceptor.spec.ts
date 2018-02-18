@@ -13,7 +13,7 @@ describe('Interceptors', () => {
         constructor(){
         }                
         invoke(this: InterceptorProperties): any {
-            let result = this.next();
+            let result = this.next(...this.args);
             return `PRE${result}POST`;
         }
     }
@@ -25,10 +25,10 @@ describe('Interceptors', () => {
             return 'hello';
         }
 
-        // @Intercepted(ExampleInterceptor)
-        // getNamedHelloString(name: string): string {
-        //     return `Hello-Mr-${name}`;
-        // }
+        @Intercepted(ExampleInterceptor)
+        getNamedHelloString(name: string): string {
+            return `Hello-Mr-${name}`;
+        }
     }
     
     it('Interceptor is executed with function without parameters', () => {
@@ -37,9 +37,9 @@ describe('Interceptors', () => {
         expect(result).to.equals('PREhelloPOST');
     });
 
-    // it('Interceptor is executed with function with parameters', () => {
-    //     let obj = new ExampleIntercepted();
-    //     const result = obj.getNamedHelloString('pablo');
-    //     expect(result).to.equals('PREHello-Mr-pabloPOST');
-    // });
+    it('Interceptor is executed with function with parameters', () => {
+        let obj = new ExampleIntercepted();
+        const result = obj.getNamedHelloString('pablo');
+        expect(result).to.equals('PREHello-Mr-pabloPOST');
+    });
 });
