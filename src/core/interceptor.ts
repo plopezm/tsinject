@@ -24,13 +24,11 @@ export function Interceptor(interceptor: InterceptorComponent | any) {
 }
 
 // It binds method with interceptor
-export function Intercepted(...clazzes: any[]) {
+export function Intercepted(clazz: any) {
     return function(target: any, key: string, descriptor: PropertyDescriptor): any {
-        for (let clazz of clazzes) {
-            let interceptor = InjectionFactory.getSingleton(clazz.name);
-            let performer = performInterception.bind({interceptor: interceptor, target: target[key]});
-            descriptor.value = performer;
-        }
+        let interceptor = InjectionFactory.getSingleton(clazz.name);
+        let performer = performInterception.bind({interceptor: interceptor, target: target[key]});
+        descriptor.value = performer;
     }
 }
 
