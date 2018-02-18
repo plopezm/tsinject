@@ -9,16 +9,16 @@ describe('Interceptors', () => {
 
     @Interceptor
     class ExampleInterceptor implements InterceptorComponent{
-        invoke(this: InterceptorProperties): any {
-            let result = this.next(...this.args);
+        invoke(this: InterceptorProperties, next: Function, ...args: any[]): any {
+            let result = next(args);
             return `[${result}]`;
         }
     }
 
     @Interceptor
-    class ExampleInterceptor2 {
-        invoke(this: InterceptorProperties): any {
-            let result = this.next(...this.args);
+    class ExampleInterceptor2 implements InterceptorComponent {
+        invoke(this: InterceptorProperties, next: Function, ...args: any[]): any {
+            let result = next(args);
             return `<${result}>`;
         }
     }
@@ -39,11 +39,10 @@ describe('Interceptors', () => {
             return `Hello Mr ${name} ${surname} ${surname2}`;
         }
 
-        // @Intercepted(ExampleInterceptor)
-        // @Intercepted(ExampleInterceptor2)
-        // getHelloString2(): string {
-        //     return 'Hello';
-        // }
+        @Intercepted(ExampleInterceptor, ExampleInterceptor2)
+        getHelloString2(): string {
+            return 'Hello';
+        }
     }
     
     it('Interceptor is executed with function without parameters', () => {
@@ -64,9 +63,9 @@ describe('Interceptors', () => {
         expect(result).to.equals('[Hello Mr Pablo Lopez Martinez]');
     });
 
-    // it('Multiple interceptors are executed', () => {
-    //     let obj = new ExampleIntercepted();
-    //     const result = obj.getHelloString2();
-    //     expect(result).to.equals('<[Hello]>');
-    // });
+    it('Multiple interceptors are executed', () => {
+        let obj = new ExampleIntercepted();
+        const result = obj.getHelloString2();
+        expect(result).to.equals('<[Hello]>');
+    });
 });

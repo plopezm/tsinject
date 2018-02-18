@@ -2,21 +2,20 @@ import 'reflect-metadata';
 import { InjectionFactory } from '../store/injection-factory';
 
 export interface InterceptorComponent {
-    invoke(): void;
+    invoke(next: Function, ...args: any[]): void;
 }
 
 export interface InterceptorProperties {
     next: Function;
-    args: any[];
 }
 
 interface ProxyPerformerProperties {
-    interceptor: Function;
-    target: Function;
+    nextStack: Function[];
+    result?: any;
 }
 
 // It declares an interceptor
-export function Interceptor(interceptor: InterceptorComponent | any) {
+export function Interceptor(interceptor: InterceptorComponent) {
     if (!interceptor.prototype.invoke) {
         throw Error("An interceptor class MUST implements interface InterceptorComponent");
     }
@@ -24,14 +23,30 @@ export function Interceptor(interceptor: InterceptorComponent | any) {
 }
 
 // It binds method with interceptor
-export function Intercepted(clazz: any) {
+export function Intercepted(...clazzes: InterceptorComponent[]) {
     return function(target: any, key: string, descriptor: PropertyDescriptor): any {
-        let interceptor = InjectionFactory.getSingleton(clazz.name);
-        let performer = performInterception.bind({interceptor: interceptor, target: target[key]});
+        let interceptors = [];
+        let i = clazzes.length;
+        while(i--) {
+            let interceptor = InjectionFactory.getSingleton(clazzes[i].name);
+            interceptors.push(interceptor);
+        }
+        interceptors.push(target[key]);
+        let performer = performInterception.bind({nextStack: interceptors});
         descriptor.value = performer;
     }
 }
 
 const performInterception = function(this: ProxyPerformerProperties, ...args: any[]){
-    return this.interceptor.apply({next: this.target, args: args});
+    let next = this.nextStack.shift();
+    if (next === undefined) {
+        return this.result;
+    }
+    let performer = performInterception.bind({nextStack: this.nextStack, result: this.result});
+    if (this.nextStack.length !== 0){
+        this.result = next.apply({},[performer, ...args]);
+    } else {
+        this.result = next.apply({}, ...args);
+    }
+    return this.result;
 }
