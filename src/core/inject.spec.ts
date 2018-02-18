@@ -20,7 +20,7 @@ describe('InjectionFactory', () => {
         } 
         InjectionFactory.register(Example);
         let singletons = InjectionFactory.getSingletons();
-        expect(Object.keys(singletons).length).to.equals(1);
+        expect(Object.keys(singletons).length).not.to.equals(0);
         expect(singletons['Example']).to.not.equals(undefined);
     });
 
