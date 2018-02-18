@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 import { InjectionFactory } from '../store/injection-factory';
 
-export interface InterceptorComponent {
-    invoke(next: Function, ...args: any[]): void;
-}
+export type NextInterceptor = (...args: any[]) => any;
 
-export interface InterceptorProperties {
-    next: Function;
+export interface InterceptorComponent {
+    invoke(next: NextInterceptor, ...args: any[]): void;
 }
 
 interface ProxyPerformerProperties {
@@ -15,7 +13,7 @@ interface ProxyPerformerProperties {
 }
 
 // It declares an interceptor
-export function Interceptor(interceptor: InterceptorComponent) {
+export function Interceptor(interceptor: InterceptorComponent | any) {
     if (!interceptor.prototype.invoke) {
         throw Error("An interceptor class MUST implements interface InterceptorComponent");
     }
@@ -23,7 +21,7 @@ export function Interceptor(interceptor: InterceptorComponent) {
 }
 
 // It binds method with interceptor
-export function Intercepted(...clazzes: InterceptorComponent[]) {
+export function Intercepted(...clazzes: (InterceptorComponent | any)[]) {
     return function(target: any, key: string, descriptor: PropertyDescriptor): any {
         let interceptors = [];
         let i = clazzes.length;
@@ -46,7 +44,7 @@ const performInterception = function(this: ProxyPerformerProperties, ...args: an
     if (this.nextStack.length !== 0){
         this.result = next.apply({},[performer, ...args]);
     } else {
-        this.result = next.apply({}, ...args);
+        this.result = next.apply({}, args);
     }
     return this.result;
 }

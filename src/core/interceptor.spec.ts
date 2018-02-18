@@ -2,23 +2,22 @@ import { Inject, Produces } from './inject';
 import { InjectionFactory } from './../index';
 import { expect } from 'chai';
 import 'mocha';
-import { Interceptor, Intercepted, InterceptorComponent, InterceptorProperties } from './interceptor';
-
+import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor } from './interceptor';
 
 describe('Interceptors', () => {
 
     @Interceptor
     class ExampleInterceptor implements InterceptorComponent{
-        invoke(this: InterceptorProperties, next: Function, ...args: any[]): any {
-            let result = next(args);
+        invoke(next: NextInterceptor, ...args: any[]): any {
+            let result = next(...args);
             return `[${result}]`;
         }
     }
 
     @Interceptor
     class ExampleInterceptor2 implements InterceptorComponent {
-        invoke(this: InterceptorProperties, next: Function, ...args: any[]): any {
-            let result = next(args);
+        invoke(next: NextInterceptor, ...args: any[]): any {
+            let result = next(...args);
             return `<${result}>`;
         }
     }
@@ -42,6 +41,11 @@ describe('Interceptors', () => {
         @Intercepted(ExampleInterceptor, ExampleInterceptor2)
         getHelloString2(): string {
             return 'Hello';
+        }
+
+        @Intercepted(ExampleInterceptor, ExampleInterceptor2)
+        getNamedHelloWithSurnameString2(name: string, surname: string, surname2: string): string {
+            return `Hello Mr ${name} ${surname} ${surname2}`;
         }
     }
     
@@ -67,5 +71,11 @@ describe('Interceptors', () => {
         let obj = new ExampleIntercepted();
         const result = obj.getHelloString2();
         expect(result).to.equals('<[Hello]>');
+    });
+
+    it('Interceptor is executed with a lot of parameters, multiple interceptors', () => {
+        let obj = new ExampleIntercepted();
+        const result = obj.getNamedHelloWithSurnameString2('Pablo', 'Lopez', 'Martinez');
+        expect(result).to.equals('<[Hello Mr Pablo Lopez Martinez]>');
     });
 });
