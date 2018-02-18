@@ -1,6 +1,6 @@
 # tsinject
 
-Dependency injection library. Currently only Singletons are implemented
+Dependency injection & cross-cutting concern library. This library provides the necessary tools to implement any application using DI and interceptors.
 
 # Installing
 
@@ -94,3 +94,55 @@ export class UserResource {
 }
 ```
 
+# Implementing Interceptors
+
+Interceptors is the way that we use to implement cross-cutting functionalities. This library provides a way to implement our interceptors for a typescript nodejs application. This library supports multi-interceptor declaration, so you can declare multiple interceptors for a method.
+
+1. Implementing interceptors
+
+```
+    import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor } from "@plopezm/tsinject";
+
+    @Interceptor
+    class ExampleInterceptor implements InterceptorComponent{
+        invoke(next: NextInterceptor, ...args: any[]): any {
+
+            // Here the real method (or next interceptor) is executed
+            // We have to get the result returned by next function.
+            // next() could be a call to the real method or a call to the next interceptor
+            let result = next(...args);
+
+            // Finally we have to return the value that we want to return ( we can modify it, or args, ...)
+            // In this example we are going to modify the original method output adding '[]'
+            return `[${result}]`;
+        }
+    }
+```
+
+2. Declaring the interceptor in the desired method
+
+```
+    @Intercepted(ExampleInterceptor)
+    getNamedHelloString(name: string): string {
+        return `Hello Mr ${name}`;
+    }
+```
+
+3. Executing our method
+
+```
+    let obj = new ExampleIntercepted();
+    // The output will be '[Hello Mr Pablo]' instead of 'Hello Mr Pablo'
+    const result = obj.getNamedHelloString('Pablo');
+```
+
+In addition is it possible to set more than one interceptors for a method. The order of declaration is important because it will detemine the execution order. For example:
+
+```
+        @Intercepted(ExampleInterceptor, ExampleInterceptor2)
+        getNamedHelloWithSurnameString2(name: string, surname: string, surname2: string): string {
+            return `Hello Mr ${name} ${surname} ${surname2}`;
+        }
+```
+
+In this example the interceptor 'ExampleInterceptor' will execute in first place, then 'ExampleInterceptor2' and finally the method 'getNamedHelloWithSurnameString2'

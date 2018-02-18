@@ -1,6 +1,6 @@
 {
   "name": "@plopezm/tsinject",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,6 +8,9 @@
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "clean": "rm -fr dist"
   },
+  "keywords": [
+    "DI", "cross-cutting concern", "interceptor", "injection"
+  ],
   "author": "Pablo LM <pabloplm@gmail.com>",
   "repository": {
     "type": "git",

@@ -1,4 +1,5 @@
-import { Inject, InjectionFactory, Produces } from './inject';
+import { Inject, Produces } from './inject';
+import { InjectionFactory } from './../index';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -19,8 +20,8 @@ describe('InjectionFactory', () => {
         } 
         InjectionFactory.register(Example);
         let singletons = InjectionFactory.getSingletons();
-        expect(Object.keys(singletons.singletons).length).to.equals(1);
-        expect(singletons.singletons['Example']).to.not.equals(undefined);
+        expect(Object.keys(singletons).length).not.to.equals(0);
+        expect(singletons['Example']).to.not.equals(undefined);
     });
 
     it('Object is injected', () => {
@@ -51,9 +52,10 @@ describe('InjectionFactory', () => {
         class Tester {
             @Inject("exampleFactory")
             example: Example;
-
+        }
+        class ExampleFactory {
             @Produces("exampleFactory")
-            produceExample(){
+            static produceExample(){
                 let example: Example = new Example();
                 example.data = "Initialized";
                 return example;
