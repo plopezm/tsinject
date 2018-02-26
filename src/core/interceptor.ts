@@ -7,6 +7,12 @@ export interface InterceptorComponent {
     invoke(next: NextInterceptor, classIntercepted: InterceptedClass, ...args: any[]): void;
 }
 
+/**
+ * This interface is used to know the method that was called when we are executing an interceptor
+ * 
+ * @export
+ * @interface InterceptedClass
+ */
 export interface InterceptedClass {
     targetClass: any;
     targetMethodName: string;
