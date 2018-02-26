@@ -13,6 +13,7 @@ npm install --save @plopezm/tsinject
 1. Defining a simple class: 
 
 ```
+@Injectable
 export class UserService {
 
     users: any = {};
@@ -37,20 +38,11 @@ export class UserService {
 
 ```
 
-2. Import it in index.ts and call to InjectorFactory
+2. Use your singleton
 
 ```
-import { InjectionFactory } from '@plopezm/tsinject'
-import { UserService } from './services/user-service';
-import { UserResource } from "./resources/user-resource";
-
-InjectionFactory.register(UserService);
-```
-
-3. Use your singleton
-
-```
-import { Inject } from "@plopezm/tsinject";
+import { UserService } from './services/user.service';
+import { Inject } from '@plopezm/tsinject';
 
 export class UserResource {
 
