@@ -3,23 +3,22 @@ import { InjectionFactory } from './../index';
 import { expect } from 'chai';
 import 'mocha';
 
-
 describe('InjectionFactory', () => {
-    class Example {
+    class Example {
         data: any = {};
-        constructor(){
+        constructor() {
             this.data['example'] = {
-                "text": "example"
-            }
+                'text': 'example'
+            };
         }
     }
     it('Object is registered', () => {
         class Tester {
             @Inject()
             example: Example;
-        } 
+        }
         InjectionFactory.register(Example);
-        let singletons = InjectionFactory.getSingletons();
+        const singletons = InjectionFactory.getSingletons();
         expect(Object.keys(singletons).length).not.to.equals(0);
         expect(singletons['Example']).to.not.equals(undefined);
         InjectionFactory.removeInstance(Example);
@@ -44,29 +43,29 @@ describe('InjectionFactory', () => {
         }
         const tester = new Tester();
         expect(tester.example.data).to.not.equals(undefined);
-        tester.example.data['other'] = "example value";
+        tester.example.data['other'] = 'example value';
         const tester2UsesSingleton = new Tester();
-        expect(tester2UsesSingleton.example.data["other"]).to.equals("example value");
+        expect(tester2UsesSingleton.example.data['other']).to.equals('example value');
         InjectionFactory.removeInstance(Example);
     });
 
     it('Singleton object is gotten from a factory method', () => {
         InjectionFactory.register(Example);
         class Tester {
-            @Inject("exampleFactory")
+            @Inject('exampleFactory')
             example: Example;
         }
         class ExampleFactory {
-            @Produces("exampleFactory")
-            static produceExample(){
-                let example: Example = new Example();
-                example.data = "Initialized";
+            @Produces('exampleFactory')
+            static produceExample() {
+                const example: Example = new Example();
+                example.data = 'Initialized';
                 return example;
             }
         }
         const tester = new Tester();
         expect(tester.example.data).to.not.equals(undefined);
-        expect(tester.example.data).to.equals("Initialized");
+        expect(tester.example.data).to.equals('Initialized');
         InjectionFactory.removeInstance(Example);
     });
 
@@ -74,25 +73,25 @@ describe('InjectionFactory', () => {
         @Injectable
         class Example2 {
             data: any = {};
-            constructor(){
+            constructor() {
                 this.data['example'] = {
-                    "text": "example"
-                }
+                    'text': 'example'
+                };
             }
         }
         class Tester {
             @Inject()
             example: Example2;
         }
-        let singletons = InjectionFactory.getSingletons();
+        const singletons = InjectionFactory.getSingletons();
         expect(Object.keys(singletons).length).not.to.equals(0);
         expect(singletons['Example2']).to.not.equals(undefined);
         const tester = new Tester();
         expect(tester.example.data).to.not.equals(undefined);
-        tester.example.data['other'] = "example value";
+        tester.example.data['other'] = 'example value';
         const tester2UsesSingleton = new Tester();
-        expect(tester2UsesSingleton.example.data["other"]).to.equals("example value");
+        expect(tester2UsesSingleton.example.data['other']).to.equals('example value');
         InjectionFactory.removeInstance(Example2);
     });
-    
+
 });

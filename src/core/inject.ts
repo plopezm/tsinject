@@ -1,16 +1,16 @@
 import 'reflect-metadata';
-import { InjectionFactory } from '../store/injection-factory';
+import { InjectionFactory } from '../store/injection-factory';
 
 function performInject(target: any, key: string, instanceToInject: any) {
     Object.defineProperty(target, key, {
-        get: function () {
+        get: function() {
             return instanceToInject;
         },
-        set: function (val) {
+        set: function(val) {
             instanceToInject = val;
         },
-        enumerable:true,
-        configurable:true
+        enumerable: true,
+        configurable: true
     });
 }
 
@@ -18,32 +18,30 @@ export function Injectable(clazz: any) {
     InjectionFactory.register(clazz);
 }
 
-export function Inject(named?: string){
+export function Inject(named?: string) {
     return function(target: any, key: string): any {
-        let metadata = Reflect.getMetadata('design:type', target, key)
-        if(!metadata){
-            throw new Error('The target class has not been defined. If you already defined it, please import the class before')
+        const metadata = Reflect.getMetadata('design:type', target, key);
+        if (!metadata) {
+            throw new Error('The target class has not been defined. If you already defined it, please import the class before');
         }
-        let intanceToInjectName = named === undefined ? metadata.name : named;
-        let instanceToInject = InjectionFactory.getSingleton(intanceToInjectName);
+        const intanceToInjectName = named === undefined ? metadata.name : named;
+        const instanceToInject = InjectionFactory.getSingleton(intanceToInjectName);
 
-        if(instanceToInject !== undefined){
+        if (instanceToInject !== undefined) {
             performInject(target, key, instanceToInject);
             return;
         }
 
         InjectionFactory.subscribeToInjection(intanceToInjectName, () => {
-            let instanceToInject = InjectionFactory.getSingleton(intanceToInjectName);
-            performInject(target, key, instanceToInject);
+            performInject(target, key, InjectionFactory.getSingleton(intanceToInjectName));
         });
-    }
+    };
 }
 
 export function Produces(name: string) {
-    return function (target: any, key: string, descriptor: TypedPropertyDescriptor<any>): any {
-        let producer:any = descriptor.value;      
-        let instance = producer.call(target);
+    return function(target: any, key: string, descriptor: TypedPropertyDescriptor<any>): any {
+        const producer: any = descriptor.value;
+        const instance = producer.call(target);
         InjectionFactory.registerInstance(name, instance);
-    }
+    };
 }
-

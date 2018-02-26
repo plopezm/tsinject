@@ -1,15 +1,23 @@
 {
   "name": "@plopezm/tsinject",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
-    "clean": "rm -fr dist"
+    "clean": "rm -fr dist",
+    "compile": "node node_modules/typescript/bin/tsc",
+    "format": "node node_modules/typescript-formatter/bin/tsfmt -r",
+    "lint": "node node_modules/tslint/bin/tslint ./src/**/*.ts",
+    "validate": "npm run format && npm run lint",
+    "build": "npm run clean && npm run validate && npm run compile"
   },
   "keywords": [
-    "DI", "cross-cutting concern", "interceptor", "injection"
+    "DI",
+    "cross-cutting concern",
+    "interceptor",
+    "injection"
   ],
   "author": "Pablo LM <pabloplm@gmail.com>",
   "repository": {
@@ -27,6 +35,8 @@
     "chai": "^4.1.2",
     "mocha": "^4.1.0",
     "ts-node": "^4.1.0",
-    "typescript": "^2.6.2"
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2",
+    "typescript-formatter": "^7.1.0"
   }
 }
