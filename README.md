@@ -93,11 +93,11 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
 1. Implementing interceptors
 
 ```
-    import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor } from "@plopezm/tsinject";
+    import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor, InterceptedClass } from "@plopezm/tsinject";
 
     @Interceptor
     class ExampleInterceptor implements InterceptorComponent{
-        invoke(next: NextInterceptor, ...args: any[]): any {
+        invoke(next: NextInterceptor, classIntercepted: InterceptedClass, ...args: any[]): any {
 
             // Here the real method (or next interceptor) is executed
             // We have to get the result returned by next function.

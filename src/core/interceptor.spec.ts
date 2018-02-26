@@ -2,13 +2,15 @@ import { Inject, Produces } from './inject';
 import { InjectionFactory } from './../index';
 import { expect } from 'chai';
 import 'mocha';
-import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor } from './interceptor';
+import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor, InterceptedClass } from './interceptor';
 
 describe('Interceptors', () => {
 
     @Interceptor
     class ExampleInterceptor implements InterceptorComponent{
-        invoke(next: NextInterceptor, ...args: any[]): any {
+        invoke(next: NextInterceptor, classIntercepted: InterceptedClass, ...args: any[]): any {
+            expect(classIntercepted).to.not.undefined;
+            expect(classIntercepted.targetClass).to.not.undefined;
             let result = next(...args);
             return `[${result}]`;
         }
@@ -16,7 +18,9 @@ describe('Interceptors', () => {
 
     @Interceptor
     class ExampleInterceptor2 implements InterceptorComponent {
-        invoke(next: NextInterceptor, ...args: any[]): any {
+        invoke(next: NextInterceptor, classIntercepted: InterceptedClass, ...args: any[]): any {
+            expect(classIntercepted).to.not.undefined;
+            expect(classIntercepted.targetClass).to.not.undefined;
             let result = next(...args);
             return `<${result}>`;
         }
