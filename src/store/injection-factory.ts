@@ -20,6 +20,10 @@ export namespace InjectionFactory {
         });
     }
 
+    export function removeInstance(clazz: any) {
+        delete injectionStore.singletons[clazz.name];
+    }
+
     /**
      * Registers an specific instance in a given name
      * 

@@ -14,10 +14,16 @@ function performInject(target: any, key: string, instanceToInject: any) {
     });
 }
 
+export function Injectable(clazz: any) {
+    InjectionFactory.register(clazz);
+}
 
 export function Inject(named?: string){
     return function(target: any, key: string): any {
         let metadata = Reflect.getMetadata('design:type', target, key)
+        if(!metadata){
+            throw new Error('The target class has not been defined. If you already defined it, please import the class before')
+        }
         let intanceToInjectName = named === undefined ? metadata.name : named;
         let instanceToInject = InjectionFactory.getSingleton(intanceToInjectName);
 
