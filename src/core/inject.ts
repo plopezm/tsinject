@@ -21,8 +21,8 @@ export function Injectable(clazz: any) {
 export function Inject(named?: string) {
     return function(target: any, key: string): any {
         const metadata = Reflect.getMetadata('design:type', target, key);
-        if (!metadata) {
-            throw new Error('The target class has not been defined. If you already defined it, please import the class before');
+        if (!metadata && !named) {
+            throw new Error('[Inject] The target class has not been defined. If you already defined it, please import the class before');
         }
         const intanceToInjectName = named === undefined ? metadata.name : named;
         const instanceToInject = InjectionFactory.getSingleton(intanceToInjectName);
@@ -41,7 +41,7 @@ export function Inject(named?: string) {
 export function Produces(name: string) {
     return function(target: any, key: string, descriptor: TypedPropertyDescriptor<any>): any {
         const producer: any = descriptor.value;
-        const instance = producer.call(target);
-        InjectionFactory.registerInstance(name, instance);
+        const intanceBuild = producer.call();
+        InjectionFactory.registerInstance(name, intanceBuild);
     };
 }

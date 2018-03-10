@@ -50,15 +50,17 @@ describe('InjectionFactory', () => {
     });
 
     it('Singleton object is gotten from a factory method', () => {
-        InjectionFactory.register(Example);
         class Tester {
             @Inject('exampleFactory')
-            example: Example;
+            example: OtherClassToBeInjected;
+        }
+        class OtherClassToBeInjected {
+            data: string;
         }
         class ExampleFactory {
             @Produces('exampleFactory')
-            static produceExample() {
-                const example: Example = new Example();
+            static produceOtherClassToBeInjected() {
+                const example: OtherClassToBeInjected = new OtherClassToBeInjected();
                 example.data = 'Initialized';
                 return example;
             }

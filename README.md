@@ -12,7 +12,7 @@ npm install --save @plopezm/tsinject
 
 1. Defining a simple class: 
 
-```
+```typescript
 @Injectable
 export class UserService {
 
@@ -40,7 +40,7 @@ export class UserService {
 
 2. Use your singleton
 
-```
+```typescript
 import { UserService } from './services/user.service';
 import { Inject } from '@plopezm/tsinject';
 
@@ -59,7 +59,7 @@ export class UserResource {
 
 Injecting from a factory is really easy. In this case we don't have to register any class in the InjectionFactory. This is due to @Produces("") decorator registers a new singleton using the name included. To use this factory object we have to use @Inject("") with the same name that you used in @Produces("").
 
-```
+```typescript
 import { Inject, Produces } from "@plopezm/tsinject";
 
 export class UserResource {
@@ -72,18 +72,19 @@ export class UserResource {
     @Inject("MyFactoryService")
     userServiceFromFactory: UserService;
 
+    ...
+}
+
+export class UserServiceFactory {
     // Creates a new object and registers it in the InjectionFactory automatically using the name included in @Produces
     @Produces("MyFactoryService")
-    produceUserService() {
+    static produceUserService() {
         var userService = new UserService();
         userService.initialize(example, example2);
         return userService;
     }
-
-    constructor(){        
-    }
-
 }
+
 ```
 
 # Implementing Interceptors
@@ -92,7 +93,7 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
 
 1. Implementing interceptors
 
-```
+```typescript
     import { Interceptor, Intercepted, InterceptorComponent, NextInterceptor, InterceptedClass } from "@plopezm/tsinject";
 
     @Interceptor
@@ -113,7 +114,7 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
 
 2. Declaring the interceptor in the desired method
 
-```
+```typescript
     @Intercepted(ExampleInterceptor)
     getNamedHelloString(name: string): string {
         return `Hello Mr ${name}`;
@@ -122,7 +123,7 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
 
 3. Executing our method
 
-```
+```typescript
     let obj = new ExampleIntercepted();
     // The output will be '[Hello Mr Pablo]' instead of 'Hello Mr Pablo'
     const result = obj.getNamedHelloString('Pablo');
@@ -130,11 +131,11 @@ Interceptors is the way that we use to implement cross-cutting functionalities. 
 
 In addition is it possible to set more than one interceptors for a method. The order of declaration is important because it will detemine the execution order. For example:
 
-```
-        @Intercepted(ExampleInterceptor, ExampleInterceptor2)
-        getNamedHelloWithSurnameString2(name: string, surname: string, surname2: string): string {
-            return `Hello Mr ${name} ${surname} ${surname2}`;
-        }
+```typescript
+    @Intercepted(ExampleInterceptor, ExampleInterceptor2)
+    getNamedHelloWithSurnameString2(name: string, surname: string, surname2: string): string {
+        return `Hello Mr ${name} ${surname} ${surname2}`;
+    }
 ```
 
 In this example the interceptor 'ExampleInterceptor' will execute in first place, then 'ExampleInterceptor2' and finally the method 'getNamedHelloWithSurnameString2'
